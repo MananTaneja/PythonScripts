@@ -1,15 +1,10 @@
 # isPhoneAndEmail.py - Finds all the phone numbers and the emails on the clipboard.
 
 import pyperclip, re
-# Matches phone numbers that are written in any of the common americal style ([region code] [3 digits] [4 digits])
-phoneRegex = re.compile(r'''(
-    (\d{3}|\(\d{3}\))?                # area code
-    (\s|-|\.)?                        # separator
-    (\d{3})                           # first 3 digits
-    (\s|-|\.)                         # separator
-    (\d{4})                           # last 4 digits
-    (\s*(ext|x|ext.)\s*(\d{2,5}))?    # extension
-    )''', re.VERBOSE)
+
+# Mathces nummber in formats +91-0000000000 and 0000000000
+
+phoneRegex = re.compile(r'([+91]-)?(\d{10})')
 
 emailRegex = re.compile(r'''(
     [a-zA-Z0-9._%+-]+      # username
@@ -21,9 +16,7 @@ emailRegex = re.compile(r'''(
 text = str(pyperclip.paste())
 matches = []
 for groups in phoneRegex.findall(text):
-       phoneNum = '-'.join([groups[1], groups[3], groups[5]])
-       if groups[8] != '':
-           phoneNum += ' x' + groups[8]
+       phoneNum = '+91-'+(groups[1])
        matches.append(phoneNum)
 for groups in emailRegex.findall(text):
        matches.append(groups[0])
